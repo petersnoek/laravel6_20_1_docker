@@ -64,19 +64,34 @@ services:
   # If you are planning to use any other mysql client app, you may not require this
   # Go to http://localhost:8081/ to access
   # Check https://hub.docker.com/_/adminer/ for loading plugin or changing theme
-  adminer:
-    image: adminer
-    container_name: adminer
+#  adminer:
+#    image: adminer
+#    container_name: adminer
+#    restart: always
+#    ports:
+#      - 8081:8080
+#    networks:
+#      - app-network
+#    environment:
+#      MYSQL_ROOT_PASSWORD: 123456
+#      MYSQL_USER: appuser
+#      MYSQL_PASSWORD: 123456
+#      ADMINER_DESIGN: pappu687
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    platform: linux/amd64
     restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: appuser
+      PMA_PASSWORD: 123456
+    volumes:
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
     ports:
-      - 8081:8080
+      - "8888:80"
     networks:
       - app-network
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: 123456
-      ADMINER_DESIGN: pappu687
 
   # MailHog - Web and API based SMTP testing
   # Replacement of mailcatcher, MailTrap etc.
@@ -86,7 +101,8 @@ services:
   # Done! Your inbox for all email is ready at http://localhost:8025
   # Comment out the service if you don't need email
   mailhog:
-    image: mailhog/mailhog
+    image: mailhog/mailhog:latest
+    platform: linux/amd64
     container_name: mailhog
     networks:
       - app-network
