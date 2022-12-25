@@ -1,78 +1,163 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+docker-compose for Laravel 6.x
+=======================
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Ready made development environment for Laravel 6.x using docker-compose.
 
-## About Laravel
+Don't spent hours managing dependencies anymore. Just docker-compose and git - your laravel project will be up and running in minutes!
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+What's Included?
+------------------------  
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The environment is composed with the following services -
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 7.2 with fpm
+    - All common dependencies for Laravel application
+    - [Composer]
+    - nodejs and npm for [Vue.js] and [Laravel-Mix]
+    - ImageMagick + ghostscript (default) or gd (require uncommenting) for image operations
+- [Nginx] - Web server
+- [MariaDB] 10.2 - Database (drop-in replacement for MySQL with performance, stability, and openness)
+- [Adminer] - Light-weight database management frontend
+- [MailHog] - Receive emails for dev environment (Web and API based SMTP service)
 
-## Learning Laravel
+How to use
+------------------
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+I am assuming you have basic idea about how to work with [git], [docker] and [composer] based PHP projects.
+Otherwise, following the steps may not be easy for you.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### 1. Clone this repository
+You can clone it anywhere in your local machine or download as zip file.
+```shell script
+git clone https://github.com/ajaxray/docker-compose-laravel.git /tmp/docker-compose-laravel  
+```
 
-## Laravel Sponsors
+> If you want to try with fresh Laravel project, check "Starting with fresh Laravel" below in Notes section before proceeding to the next step.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+#### 2. Copy required files to your project
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+Now, copy `docker-compose.yml` file and `docker` directory to project root of your laravel application.
+```shell script
+cp -vr /tmp/docker-compose-laravel/docker* /path/to/my-project/
+cd /path/to/my-project/
+```
 
-## Contributing
+#### 3. Adjust `.env` variables
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Edit the `.env` file in project root and set the following values:
+```ini
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=appuser
+DB_PASSWORD=123456
 
-## Code of Conduct
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+```  
+Alternatively you may update parameters in `docker-compose.yml` file and set `.env` parameters accordingly.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### 4. Get up and running
 
-## Security Vulnerabilities
+Start containers from project root directory
+```shell script
+docker-compose up -d
+# Check service status
+docker-compose ps
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+If everything went OK, you should see something like this -
 
-## License
+![docker-compose laravel screenshot](./screenshot.png)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+That means your Development environment is ready!
+But we have one more step before checking the live application.
+
+#### 5. Generic Preparation for Laravel application
+
+These are generic steps to prepare any Laravel application, not specific to this Docker setup.
+But you need to run them from inside appropriate container.   
+(You may ignore any of the following commands if not required for your project.)
+
+```shell script
+docker-compose exec app composer install --no-interaction --no-suggest --no-progress --prefer-dist
+docker-compose exec app php artisan key:generate
+docker-compose exec app php artisan migrate
+docker-compose exec app php artisan db:seed
+
+# Required for Vue.js and laravel-mix
+docker-compose exec app npm install
+docker-compose exec app npm run dev
+
+# Cache configuration. Recommended for production environment
+docker-compose exec app php artisan config:cache
+```
+
+
+> 🎉 Good News 🎉  - **Your project is live by now!**
+
+Check it here:
+
+- Application: http://localhost:8080/
+- Database frontend : http://localhost:8081/
+    - root password: 123456
+    - application database user: appuser
+    - application database user's password: 123456
+- Email Panel: http://localhost:8025/
+
+The information above can be different if you've modified parameter values in `docker-compose.yml`.
+
+Important Notes
+---------------
+- **Starting with fresh Laravel**
+
+  If you have not started (or cloned) the project yet, you can start a latest Laravel project using _ONLY_ git (no other dependencies):
+   ```shell script
+   git clone https://github.com/laravel/laravel.git my-project
+   cd my-project
+   cp .env.example .env
+   ```
+
+- **Updating PHP configuration**
+
+  `docker/php/local.ini` is being loaded with PHP ini of `app` service. So, if you need to modify/add any ini value, you can use this file.
+
+- **Updating Nginx configuration**
+
+  All config files under `docker/nginx/conf.d/` will be loaded by Nginx. You can modify/add files here to modify Nginx config.  
+  The application hosting is defined in `app.conf` of this directory. Check it to know log file locations and other configurations.
+
+- **Updating Database configuration**
+
+  `docker/mysql/my.cnf` is being loaded with database configuration of `db` service. So, if you need to modify/add any configuration, use it.
+
+- **Connecting database from other database client**
+
+  To avoid conflict with local MySQL (if any), database port mapped to `33061` for localhost.
+  That means, if you want to connect the database inside container from a database client, you have to use `33061` port.
+
+- **Selecting Image library**
+
+  ImageMagick and ghostscript is enabled by default. If you prefer GD instead, comment out ImageMagick section and uncomment GD section in `docker/php/Dockerfile`
+
+- **Add/Remove/Modify services of docker-compose**
+
+  If you need to add/remove/modify any service anytime later (after `docker-compose up`), feel free to do.
+  Just remember to run the following commands from project directory to apply your changes -
+    ```shell script
+    docker-compose down
+    docker-compose up --force-recreate --build -d
+    docker image prune -f
+    ```
+
+[MailHog]: https://github.com/mailhog/MailHog
+[Nginx]: https://www.nginx.com/
+[MariaDB]: https://mariadb.org/
+[Adminer]: https://www.adminer.org/
+[Composer]: https://getcomposer.org/
+[Laravel-Mix]: https://laravel-mix.com/
+[Vue.js]: https://vuejs.org/
+[git]: https://git-scm.com/
+[docker]: https://www.docker.com/
+[composer]: https://getcomposer.org/
