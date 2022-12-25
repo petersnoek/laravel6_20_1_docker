@@ -1,6 +1,8 @@
 docker-compose for Laravel 6.x
 =======================
 
+(source: https://github.com/ajaxray/docker-compose-laravel)
+
 Ready made development environment for Laravel 6.x using docker-compose.
 
 Don't spent hours managing dependencies anymore. Just docker-compose and git - your laravel project will be up and running in minutes!
